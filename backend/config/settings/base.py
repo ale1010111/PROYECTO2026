@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-
+from django.urls import path, include
+from django.contrib import admin
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,11 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #frameworks
+    'corsheaders',
     'rest_framework',
+    #dominio app
+    'apps.consumidores',
     
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,15 +128,27 @@ STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
+        # Esto exige que el usuario esté logueado por defecto para entrar a cualquier API
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # Esto indica que la forma de loguearse es mediante JWT (Tokens)
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 
-from django.urls import path, include
-from django.contrib import admin
+#jwt configuration
+# Configuración personalizada de los Tokens
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # El token dura 1 hora
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # El refresh dura 1 día
+    'AUTH_HEADER_TYPES': ('Bearer',),               # Prefijo en la cabecera HTTP
+}
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/', include([])),
+
+#CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
