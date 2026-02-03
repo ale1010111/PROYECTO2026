@@ -4,7 +4,7 @@ from .views import ConsumidorViewSet
 
 # El router genera automáticamente rutas como /api/consumidores/
 router = DefaultRouter()
-router.register(r'lista', ConsumidorViewSet, basename='consumidor')
+router.register(r'', ConsumidorViewSet, basename='consumidor')
 
 urlpatterns = [
     path('', include(router.urls)),
