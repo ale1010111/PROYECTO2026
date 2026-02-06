@@ -40,10 +40,15 @@ export const Dashboard = () => {
       </div>
 
       <div className="max-w-xs">
-        <Button variant="danger" onClick={logout}>
-          Cerrar Sesión
-        </Button>
-      </div>
+  <Button
+    variant="secondary"
+    className="w-full text-base py-6 rounded-xl"
+    onClick={logout}
+  >
+    Cerrar Sesión
+  </Button>
+</div>
+
     </DashboardLayout>
   )
 }
